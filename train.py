@@ -1,19 +1,19 @@
 import torch
 import torchmetrics.functional as metrics
-from dgl.data import CoraGraphDataset
+from dgl.data import CoraGraphDataset, KarateClubDataset
 from model import GCN
 
 if __name__ == '__main__':
 	device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-	epochs = 100
-	dataset = CoraGraphDataset()
+	epochs = 30
+	dataset = KarateClubDataset()
 	
 	graph = dataset[0]
 
-	train_idx = torch.nonzero(graph.ndata['train_mask'], as_tuple=False).flatten()
-	test_idx = torch.nonzero(graph.ndata['test_mask'], as_tuple=False).flatten()
+	train_idx = torch.arange(0, 28)
+	test_idx = torch.arange(28, 34)
 
-	model = GCN(feature_size=1433, num_classes=7)
+	model = GCN(feature_size=34, num_classes=2)
 	criterion = torch.nn.NLLLoss()
 	optimizer = torch.optim.Adam(model.parameters(), lr=0.1, weight_decay=5e-4)
 
@@ -23,7 +23,7 @@ if __name__ == '__main__':
 	for epoch in range(epochs):
 		model.train()
 		optimizer.zero_grad()
-		n_feats = graph.ndata['feat']
+		n_feats = torch.eye(34).to(device)
 		labels = graph.ndata['label']
 
 		logits = model(graph, n_feats)
