@@ -41,3 +41,5 @@ if __name__ == '__main__':
 			accuracy = metrics.accuracy(output, labels)
 
 			print(f'epoch [{epoch+1}/{epochs}]\t Loss: {loss.item():.4f}\t Accuracy: {accuracy*100:.2f} %')
+	
+	torch.save(model.state_dict(), 'pretrained/gcn-model.pt')
