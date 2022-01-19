@@ -26,7 +26,7 @@ if __name__ == '__main__':
 		n_feats = torch.eye(34).to(device)
 		labels = graph.ndata['label']
 
-		logits = model(graph, n_feats)
+		_, logits = model(graph, n_feats)
 
 		loss = criterion(logits[train_idx], labels[train_idx])
 
@@ -35,7 +35,7 @@ if __name__ == '__main__':
 
 		with torch.no_grad():
 			model.eval()
-			output = model(graph, n_feats)
+			_, output = model(graph, n_feats)
 
 			loss = criterion(output, labels)
 			accuracy = metrics.accuracy(output, labels)

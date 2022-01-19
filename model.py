@@ -13,8 +13,8 @@ class GCN(nn.Module):
 
 	def forward(self, graph, n_feats):
 		
-		x = self.conv1(graph, n_feats)
-		x = self.dropout(x)
+		h = self.conv1(graph, n_feats)
+		x = self.dropout(h)
 		x = self.conv2(graph, x)
 
-		return self.softmax(x)
+		return h, self.softmax(x)
